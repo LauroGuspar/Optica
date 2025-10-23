@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+Fragmento de Header
+- th:fragment="header": Define un bloque reutilizable llamado "header"
+-->
+<header th:fragment="header">
+  <nav class="navbar navbar-expand-lg p-3 border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" th:href="@{/catalogo}"
+      >Óptica Divino Niño del Milagro</a
+      >
+      <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#nav"
+              aria-controls="nav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul
+                class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-3"
+        >
+          <li class="nav-item position-relative">
+            <a class="nav-link" th:href="@{/catalogo}">Catálogo</a>
+          </li>
+          <li class="nav-item position-relative">
+            <a class="nav-link" href="#ofertas">Ofertas</a>
+          </li>
+          <li class="nav-item position-relative">
+            <a class="nav-link" href="#contacto">Contacto</a>
+          </li>
+<!--          <li class="nav-item">-->
+<!--            <a-->
+<!--                    class="nav-link position-relative"-->
+<!--                    th:href="@{/carrito}"-->
+<!--                    title="Carrito"-->
+<!--            >-->
+<!--              <i class="bi bi-cart3 fs-5"></i>-->
+<!--              <span-->
+<!--                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"-->
+<!--              >0</span-->
+<!--              >-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="nav-item" th:if="${session.perfil != null && session.perfil != 4}">
+            <a
+                    class="nav-link position-relative"
+                    th:href="@{/}"
+                    title="Panel Administrador"
+            >
+              <i class="bi bi-tools"></i>
+            </a>
+<!--          </li>-->
+<!--          <li class="nav-item" th:if="${session.perfil == null}">-->
+<!--            <a class="nav-link" th:href="@{/logueo}" title="Usuario">-->
+<!--              <i class="bi bi-person-circle fs-5"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="nav-item" th:if="${session.perfil != null}">
+            <a class="nav-link" th:href="@{/cerrar-sesion}" title="Cerrar sesión">
+              <i class="bi bi-box-arrow-right fs-5"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+</body>
+</html>

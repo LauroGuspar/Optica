@@ -1,0 +1,93 @@
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(13, 110, 253, 0.18);
+}
+
+.product-card {
+  transition: 0.2s ease;
+}
+
+.filter-chip {
+  cursor: pointer;
+}
+
+.price {
+  font-weight: 700;
+}
+
+.old-price {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.thumb {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.filter-chip.active {
+  background: var(--brand);
+  color: #fff;
+}
+
+.sticky-top-2 {
+  position: sticky;
+  top: 1rem;
+  z-index: 100;
+}
+
+.zoom-on-hover {
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+
+.img-fluid.zoom-on-hover:hover {
+  transform: scale(1.1);
+}
+/*
+.carousel-item {
+  width: 400px;
+  height: 400px;
+}
+*/
+
+.carouselContainer {
+  width: 450px;
+  height: 450px;
+}
+
+div#heroCarousel {
+  width: 450px;
+  height: 450px;
+}
+.carousel-indicators [data-bs-target] {
+  background-color: black;
+}
+
+#modalCarouselInner {
+  width: 300px;
+  height: 300px;
+}
+
+ion-icon.md.hydrated {
+  width: 30px;
+  height: 30px;
+  color: black;
+  position: relative;
+}
+
+ion-icon#flecha-anterior-carousel {
+  left: -50px;
+}
+
+ion-icon#flecha-siguiente-carousel {
+  right: -50px;
+}
+
+ion-icon#flechamodal-anterior-carousel {
+  left: -10px;
+}
+
+ion-icon#flechamodal-siguiente-carousel {
+  right: -10px;
+}

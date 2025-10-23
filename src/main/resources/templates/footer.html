@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+Fragmento de Footer
+- th:fragment="footer": Define un bloque reutilizable llamado "footer"
+-->
+<footer class="bg-dark text-white pt-5 pb-3" th:fragment="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <h5 class="fw-bold mb-3">Óptica Divino Niño del Milagro</h5>
+                <p class="text-white-50">La mejor opción para tu visión.</p>
+                <ul class="list-unstyled text-white-50" id="contacto">
+                    <li><i class="bi bi-telephone-fill me-2"></i>+123456789</li>
+                    <li>
+                        <i class="bi bi-envelope-fill me-2"></i>info@miempresa.com
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <h5 class="fw-bold mb-3">Links Útiles</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="footer-link">Acerca de nosotros</a></li>
+                    <li><a href="#" class="footer-link">Portafolio</a></li>
+                    <li><a href="#" class="footer-link">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-3">Mantente Conectado</h5>
+                <form>
+                    <div class="input-group mb-3">
+                        <input
+                                type="email"
+                                class="form-control"
+                                placeholder="Tu correo"
+                                id="emailFooter"
+                        />
+                        <button class="btn btn-primary" type="button">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="d-flex mt-3">
+                    <a href="#" class="text-white me-3"
+                    ><i class="bi bi-facebook fs-5"></i
+                    ></a>
+                    <a href="#" class="text-white me-3"
+                    ><i class="bi bi-twitter fs-5"></i
+                    ></a>
+                    <a
+                            href="https://www.instagram.com/optica_divino"
+                            target="_blank"
+                            class="text-white"
+                    ><i class="bi bi-instagram fs-5"></i
+                    ></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div
+            class="container-fluid text-center text-white-50 mt-4 pt-4 border-top border-secondary"
+    >
+        <p class="mb-0">
+            &copy; <span id="year"></span> Óptica Divino Niño del Milagro. Todos
+            los derechos reservados.
+        </p>
+    </div>
+</footer>
+</body>
+</html>
