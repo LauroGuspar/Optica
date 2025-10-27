@@ -54,10 +54,32 @@ const AppUtils = (function () {
         $('.invalid-feedback').text('');
     }
 
+    function showConfirmationDialog(options = {}, onConfirm) {
+        const defaults = {
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // Rojo para acciones destructivas
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, ¡eliminar!',
+            cancelButtonText: 'Cancelar'
+        };
+
+        const config = { ...defaults, ...options };
+
+        Swal.fire(config).then((result) => {
+            if (result.isConfirmed && typeof onConfirm === 'function') {
+                onConfirm();
+            }
+        });
+    }
+
     return {
         showNotification: showNotification,
         showLoading: showLoading,
         createActionButtons: createActionButtons,
-        clearForm: clearForm
+        clearForm: clearForm,
+        showConfirmationDialog: showConfirmationDialog,
     };
 })();

@@ -34,7 +34,13 @@ $(document).ready(function () {
             columns: [
                 { data: 'id' }, { data: 'nombre' },
                 { data: 'correo' },
-                { data: 'tipodocumento.nombre' }, { data: 'ndocumento' },
+                {
+                    data: null,
+                    render: (data, type, row) => {
+                        return row.tipodocumento.nombre + ': ' + row.ndocumento;
+                    },
+                    title: 'Documento'
+                },
                 {
                     data: 'estado',
                     render: (data) => data === 1 ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Inactivo</span>'
@@ -105,25 +111,49 @@ $(document).ready(function () {
             try {
                 AppUtils.showLoading(true);
 
-                const response = await fetch(`/reniec/api/buscar-dni/${dni}`);
-                const result = await response.json();
+                if (dni.startsWith('10') || dni.startsWith('20')) {
+                    const response = await fetch(`/reniec/api/buscar-ruc/${dni}`);
+                    const result = await response.json();
 
-                if (result.success && result.data && result.data.datos) {
-                    const datos = result.data.datos;
+                    if (result.success && result.data && result.data.datos) {
+                        const datos = result.data.datos;
 
-                    $('#nombre').val(datos.nombres || '');
-                    $('#apellidoPaterno').val(datos.ape_paterno || '');
-                    $('#apellidoMaterno').val(datos.ape_materno || '');
+                        $('#nombre').val(datos.razon_social || '');
+                        $('#apellidoPaterno').val('');
+                        $('#apellidoMaterno').val('');
 
-                    if (datos.domiciliado) {
-                        const d = datos.domiciliado;
-                        const direccionCompleta = [d.direccion, d.distrito, d.provincia, d.departamento]
-                            .filter(Boolean)
-                            .join(', ');
-                        $('#direccion').val(direccionCompleta);
+                        if (datos.domiciliado) {
+                            const d = datos.domiciliado;
+                            const direccionCompleta = [d.direccion, d.distrito, d.provincia, d.departamento]
+                                .filter(Boolean)
+                                .join(', ');
+                            $('#direccion').val(direccionCompleta);
+                        }
+                    } else {
+                        Swal.fire('No encontrado', result.message || 'No se encontraron datos para este DNI', 'info');
                     }
                 } else {
-                    Swal.fire('No encontrado', result.message || 'No se encontraron datos para este DNI', 'info');
+
+                    const response = await fetch(`/reniec/api/buscar-dni/${dni}`);
+                    const result = await response.json();
+
+                    if (result.success && result.data && result.data.datos) {
+                        const datos = result.data.datos;
+
+                        $('#nombre').val(datos.nombres || '');
+                        $('#apellidoPaterno').val(datos.ape_paterno || '');
+                        $('#apellidoMaterno').val(datos.ape_materno || '');
+
+                        if (datos.domiciliado) {
+                            const d = datos.domiciliado;
+                            const direccionCompleta = [d.direccion, d.distrito, d.provincia, d.departamento]
+                                .filter(Boolean)
+                                .join(', ');
+                            $('#direccion').val(direccionCompleta);
+                        }
+                    } else {
+                        Swal.fire('No encontrado', result.message || 'No se encontraron datos para este DNI', 'info');
+                    }
                 }
 
             } catch (error) {

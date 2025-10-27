@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Ventas</title>
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+  />
+  <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+  />
+  <link th:href="@{/css/main.css}" rel="stylesheet" />
+  <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex">
+  <div
+          th:replace="~{sidebar :: sidebar(activeUri='/clientes/listar')}"
+  ></div>
+
+  <main id="main-content" class="main-content w-100">
+    <header class="header-size m-2 ms-3 me-0 mt-3 p-3">
+      <div class="d-flex align-items-center text-white">
+        <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
+          <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  class="bi bi-list"
+                  viewBox="0 0 16 16"
+          >
+            <path
+                    fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+            />
+          </svg>
+        </button>
+        <h1 class="h3 mb-0 fw-bold">Gestión de Ventas</h1>
+        <button id="btnNuevaVenta" class="btn btn-custom1 ms-auto">
+          Nuevo Registro
+        </button>
+      </div>
+    </header>
+
+    <div class="container-fluid p-4">
+      <div class="card rounded-lg card-color1">
+        <div class="card-body">
+          <h2 class="card-title h5 mb-4 fw-bold">Lista de Clientes</h2>
+          <table id="tablaVentas" class="table table-hover responsive" style="width:100%">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>N° Documento</th>
+              <th>Cliente</th>
+              <th>Vendedor</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Forma de Pago</th>
+              <th>Deuda</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal fade" id="modalVenta" tabindex="-1" aria-labelledby="modalVentaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalVentaLabel">Nueva Venta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formVenta">
+          <div class="mb-3">
+            <input type="hidden" id="ventaClienteId">
+            <label for="ventaClienteDocumento" class="form-label">Cliente (DNI/RUC)</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="ventaClienteDocumento" placeholder="Ingrese DNI o RUC y presione buscar">
+              <button class="btn btn-outline-secondary" type="button" id="btnConsultarCliente">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="ventaClienteNombre" class="form-label">Nombre del Cliente</label>
+            <input type="text" class="form-control" id="ventaClienteNombre" readonly
+                   placeholder="El nombre aparecerá aquí después de la búsqueda">
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="serieComprobante" class="form-label">Serie de Comprobante</label>
+              <select id="serieComprobante" class="form-select"></select>
+            </div>
+            <div class="col-md-4">
+              <label for="numeroVenta" class="form-label">Número de Venta</label>
+              <input type="text" id="numeroVenta" class="form-control" readonly placeholder="Se generará automáticamente">
+            </div>
+            <div class="col-md-4">
+              <label for="formaPago" class="form-label">Forma de Pago</label>
+              <select id="formaPago" class="form-select" disabled>
+                <option value="CONTADO">Contado</option>
+                <option value="CREDITO">Crédito</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="esVentaCredito">
+            <label class="form-check-label" for="esVentaCredito">¿Venta a Crédito?</label>
+          </div>
+          <div id="camposCredito" class="row g-3 mb-3 border p-3 rounded bg-light" style="display: none;">
+            <div class="col-md-3">
+              <label for="pagoInicial" class="form-label">Pago Inicial (S/)</label>
+              <input type="number" class="form-control" id="pagoInicial" placeholder="0.00" min="0">
+            </div>
+            <div class="col-md-3">
+              <label for="cuotas" class="form-label">N° de Cuotas</label>
+              <input type="number" class="form-control" id="cuotas" value="1" min="1">
+            </div>
+            <div class="col-md-3">
+              <label for="intervaloCuotas" class="form-label">Intervalo de Pago</label>
+              <select id="intervaloCuotas" class="form-select">
+                <option value="7">Semanal (7 días)</option>
+                <option value="15" selected>Quincenal (15 días)</option>
+                <option value="30">Mensual (30 días)</option>
+              </select>
+            </div>
+            <div class="col-md-3 align-self-end">
+              <p class="mb-1"><strong>Deuda:</strong> <span id="deudaRestante" class="text-danger fw-bold">S/ 0.00</span></p>
+            </div>
+            <div id="contenedorFechasCuotas" class="row g-3 mt-2 col-12"></div>
+          </div>
+          <div class="mb-3">
+            <label for="selectProducto" class="form-label">Agregar Producto</label>
+            <select id="selectProducto" class="form-select" style="width: 100%;"></select>
+          </div>
+          <div class="table-responsive">
+            <table id="tablaProductosVenta" class="table table-bordered">
+              <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end">
+            <h4>Total: <span id="totalVenta" class="fw-bold">S/ 0.00</span></h4>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" id="btnGuardarVenta" class="btn btn-primary">Guardar Venta</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalDetalleVenta" tabindex="-1" aria-labelledby="modalDetalleVentaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDetalleVentaLabel">Detalle de la Venta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="detalleVentaInfo" class="mb-4"></div>
+        <h6>Productos Vendidos</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="text-end">Precio Unit.</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-end">Subtotal</th>
+            </tr>
+            </thead>
+            <tbody id="tablaDetalleProductos"></tbody>
+          </table>
+        </div>
+        <div class="text-end mt-3">
+          <h4>Total: <span id="detalleVentaTotal" class="fw-bold">S/ 0.00</span></h4>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalGestionCuotas" tabindex="-1" aria-labelledby="modalGestionCuotasLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalGestionCuotasLabel">Gestión de Cuotas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="cuotasVentaInfo" class="mb-4"></div>
+        <h6>Plan de Pagos</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th class="text-center"># Cuota</th>
+              <th>Fecha Vencimiento</th>
+              <th class="text-end">Monto</th>
+              <th class="text-center">Estado</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tablaGestionCuotas"></tbody>
+          </table>
+        </div>
+        <div class="text-end mt-3">
+          <h4>Deuda Restante: <span id="cuotasDeudaTotal" class="fw-bold text-danger">S/ 0.00</span></h4>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalHistorialPagos" tabindex="-1" aria-labelledby="modalHistorialPagosLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHistorialPagosLabel">Historial de Pagos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="historialVentaInfo" class="mb-4"></div>
+        <h6>Pagos Realizados</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th class="text-center"># Cuota</th>
+              <th>Fecha Vencimiento</th>
+              <th class="text-end">Monto</th>
+              <th class="text-center">Estado</th>
+              <th class="text-center">Acción / Medio de Pago</th>
+            </tr>
+            </thead>
+            <tbody id="tablaHistorialPagos"></tbody>
+          </table>
+        </div>
+        <div class="text-end mt-3">
+          <h4>Deuda Restante: <span id="historialDeudaTotal" class="fw-bold text-danger">S/ 0.00</span></h4>
+        </div>
+        <div id="infoLiquidacion" class="alert alert-success mt-3" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalRegistrarPagoCuota" tabindex="-1" aria-labelledby="modalRegistrarPagoCuotaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRegistrarPagoCuotaLabel">Registrar Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Seleccione el medio de pago para la cuota <strong id="numeroCuotaAPagar"></strong>.</p>
+        <label for="medioPagoCuota" class="form-label">Medio de Pago</label>
+        <select id="medioPagoCuota" class="form-select">
+          <option value="EFECTIVO">Efectivo</option>
+          <option value="YAPE">Yape / Plin</option>
+          <option value="TARJETA">Tarjeta</option>
+          <option value="TRANSFERENCIA">Transferencia</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnConfirmarPagoCuota" class="btn btn-primary">Confirmar Pago</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+        id="notification-container"
+        class="toast-container position-fixed top-0 end-0 p-3"
+></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive/2.5.0/dataTables.responsive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.5.0/responsive.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
+
+<script th:src="@{/js/utiles-comunes.js}"></script>
+<script th:src="@{/js/ventas.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

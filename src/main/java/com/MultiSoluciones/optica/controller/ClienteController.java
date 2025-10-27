@@ -98,6 +98,29 @@ public class ClienteController {
         }
     }
 
+    @GetMapping("/api/documento/{doc}")
+    @ResponseBody
+    public ResponseEntity<?> obtenerClientePorDocumento(@PathVariable String doc) {
+        try {
+            return clienteService.obtenerClientePorDocumento(doc).map(cliente -> {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", true);
+                response.put("data", cliente);
+                return ResponseEntity.ok(response);
+            }).orElseGet(() -> {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("message", "Cliente no encontrado");
+                return ResponseEntity.ok(response);
+            });
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Error al obtener cliente: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
     @DeleteMapping("/api/eliminar/{id}")
     @ResponseBody
     public ResponseEntity<?> eliminarClienteAjax(@PathVariable Long id) {

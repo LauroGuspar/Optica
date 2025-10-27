@@ -49,9 +49,9 @@ public class ClienteService {
                 }
             }
 
-            if (clienteRepository.findByCorreoIgnoreCase(cliente.getCorreo()).isPresent()) {
-                throw new IllegalArgumentException("El correo electrónico ya está registrado.");
-            }
+//            if (clienteRepository.findByCorreoIgnoreCase(cliente.getCorreo()).isPresent()) {
+//                throw new IllegalArgumentException("El correo electrónico ya está registrado.");
+//            }
 
             cliente.setEstado(1);
             return clienteRepository.save(cliente);
@@ -75,6 +75,11 @@ public class ClienteService {
             return Optional.empty();
         }
         return clienteRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Cliente> obtenerClientePorDocumento(String ndoc) {
+        return clienteRepository.findByNdocumento(ndoc);
     }
 
     @Transactional
