@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Inventario</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex">
+    <div
+            th:replace="~{sidebar :: sidebar(activeUri='/productos/marcas/listar')}"
+    ></div>
+
+    <main id="main-content" class="main-content w-100">
+        <header class="header-size m-2 ms-3 me-0 mt-3 p-3">
+            <div class="d-flex align-items-center text-white">
+                <button id="open-sidebar" class="btn btn-light d-md-none me-3 p-1">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            class="bi bi-list"
+                            viewBox="0 0 16 16"
+                    >
+                        <path
+                                fill-rule="evenodd"
+                                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                        />
+                    </svg>
+                </button>
+                <h1 class="h3 mb-0 fw-bold">Gestión de Inventario</h1>
+            </div>
+        </header>
+
+        <div class="container-fluid p-4">
+            <div class="card rounded-lg card-color1">
+                <div class="card-body">
+                    <h2 class="card-title h5 mb-4 fw-bold">Inventario de productos</h2>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tablaInventario" class="table table-hover responsive" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Stock Actual</th>
+                                    <th>Stock Mínimo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Llenado por DataTables -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal fade" id="modalMovimientos" tabindex="-1" aria-labelledby="modalMovimientosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMovimientosLabel">Movimientos del Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="nombreProductoMovimiento" class="mb-3"></h6>
+                <div class="table-responsive">
+                    <table id="tablaMovimientos" class="table table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Fecha Venta</th>
+                            <th>N° Documento</th>
+                            <th class="text-end">Precio Venta</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="text-end mt-3">
+                    <h4>Total Vendido: <span id="totalVendidoProducto" class="fw-bold text-success">S/ 0.00</span></h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div
+        id="notification-container"
+        class="toast-container position-fixed top-0 end-0 p-3"
+></div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script
+        type="text/javascript"
+        src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"
+></script>
+<script
+        type="text/javascript"
+        src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"
+></script>
+<script
+        type="text/javascript"
+        src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"
+></script>
+<script
+        type="text/javascript"
+        src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:src="@{/js/utiles-comunes.js}"></script>
+<script th:src="@{/js/inventario.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
