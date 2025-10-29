@@ -145,7 +145,7 @@ CREATE TABLE `detalle_ventas` (
   `cantidad` int NOT NULL,
   `precio` decimal(10,2) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `detalle_ventas`
@@ -364,7 +364,7 @@ CREATE TABLE `pagos_credito_detalle` (
   `monto_pagado` decimal(10,2) DEFAULT NULL,
   `numero_cuota` int NOT NULL,
   `id_venta` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `pagos_credito_detalle`
@@ -499,7 +499,7 @@ CREATE TABLE `tipo_comprobante` (
   `estado` int DEFAULT NULL,
   `nombre` varchar(255) DEFAULT NULL,
   `serie` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `tipo_comprobante`
