@@ -6,7 +6,7 @@ body {
     min-height: 100vh;
 }
 .navbar {
-    background: rgb(13, 110, 253);
+    background: rgb(172, 156, 141, 1);
 }
 
 .nav-item a::after {
